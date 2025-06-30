@@ -39,79 +39,37 @@ export default function ContactPage() {
         e.preventDefault()
         setIsSubmitting(true)
 
-        // Simulate form submission
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
 
-        alert("Thank you for your message! I'll get back to you within 24 hours.")
-        setFormData({
-            name: "",
-            email: "",
-            subject: "",
-            message: "",
-            projectType: "",
-        })
+            const result = await response.json()
+
+            if (response.ok) {
+                alert("Thank you for your message! I'll get back to you within 24 hours.")
+                setFormData({
+                    name: "",
+                    email: "",
+                    subject: "",
+                    message: "",
+                    projectType: "",
+                })
+            } else {
+                alert(result.message || "Something went wrong.")
+            }
+        } catch (error) {
+            console.error("Submission error:", error)
+            alert("An error occurred. Please try again.")
+        }
+
         setIsSubmitting(false)
     }
 
-    // const contactMethods = [
-    //     {
-    //         icon: Mail,
-    //         title: "Email",
-    //         value: "hello@yourname.com",
-    //         description: "Send me an email anytime",
-    //         action: "mailto:hello@yourname.com",
-    //         color: "text-blue-600",
-    //         bgColor: "bg-blue-50",
-    //     },
-    //     {
-    //         icon: Phone,
-    //         title: "Phone",
-    //         value: "+1 (555) 123-4567",
-    //         description: "Call me during business hours",
-    //         action: "tel:+15551234567",
-    //         color: "text-green-600",
-    //         bgColor: "bg-green-50",
-    //     },
-    //     {
-    //         icon: MapPin,
-    //         title: "Location",
-    //         value: "San Francisco, CA",
-    //         description: "Available for local meetings",
-    //         action: "#",
-    //         color: "text-purple-600",
-    //         bgColor: "bg-purple-50",
-    //     },
-    //     {
-    //         icon: Calendar,
-    //         title: "Schedule",
-    //         value: "Book a Call",
-    //         description: "Schedule a 30-min consultation",
-    //         action: "https://calendly.com/yourname",
-    //         color: "text-orange-600",
-    //         bgColor: "bg-orange-50",
-    //     },
-    // ]
-
-    // const socialLinks = [
-    //     {
-    //         icon: Github,
-    //         name: "GitHub",
-    //         url: "https://github.com/yourusername",
-    //         color: "hover:text-gray-900",
-    //     },
-    //     {
-    //         icon: Linkedin,
-    //         name: "LinkedIn",
-    //         url: "https://linkedin.com/in/yourname",
-    //         color: "hover:text-blue-600",
-    //     },
-    //     {
-    //         icon: Twitter,
-    //         name: "Twitter",
-    //         url: "https://twitter.com/yourusername",
-    //         color: "hover:text-blue-400",
-    //     },
-    // ]
 
     const projectTypes = [
         "Web Development",
